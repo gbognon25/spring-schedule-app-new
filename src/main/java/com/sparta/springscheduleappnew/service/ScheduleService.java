@@ -1,9 +1,11 @@
 package com.sparta.springscheduleappnew.service;
 
+import com.sparta.springscheduleappnew.dto.ScheduleRequestDto;
 import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,23 @@ public class ScheduleService {
         this.userRepository = userRepository;
     }
 
-    public Schedule createSchedule(Schedule schedule, Long authorId) {
+//    public Schedule createSchedule(@Valid ScheduleRequestDto schedule, Long authorId) {
+//        User author = userRepository.findById(authorId)
+//                .orElseThrow(() -> new RuntimeException("Author not found"));
+//        schedule.setAuthor(author);
+//        return scheduleRepository.save(schedule);
+//    }
+
+    public Schedule createSchedule(ScheduleRequestDto scheduleDto, Long authorId) {
+        // Retrieve the user (author) by authorId
         User author = userRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found"));
-        schedule.setAuthor(author);
+                .orElseThrow(() -> new RuntimeException("작성자가 존재하지 않습니다."));
+
+        // Create and save the schedule
+        Schedule schedule = new Schedule();
+        schedule.setTitle(scheduleDto.getTitle());
+        schedule.setDescription(scheduleDto.getDescription());
+        schedule.setAuthor(author); // Set the author (user)
         return scheduleRepository.save(schedule);
     }
 
@@ -37,7 +52,7 @@ public class ScheduleService {
         return scheduleRepository.findAll();
     }
 
-    public Schedule updateSchedule(Long id, Schedule updatedSchedule) {
+    public Schedule updateSchedule(Long id, @Valid ScheduleRequestDto updatedSchedule) {
         return scheduleRepository.findById(id)
                 .map(schedule -> {
                     schedule.setTitle(updatedSchedule.getTitle());

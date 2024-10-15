@@ -8,7 +8,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "user_schedules")
+@Table(name = "user_schedules",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "schedule_id"}))
 @NoArgsConstructor
 public class UserSchedule {
 
