@@ -3,9 +3,11 @@ package com.sparta.springscheduleappnew.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "user_schedules")
 @NoArgsConstructor
 public class UserSchedule {
