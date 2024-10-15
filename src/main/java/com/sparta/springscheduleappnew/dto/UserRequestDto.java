@@ -14,5 +14,8 @@ public class UserRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     @NotBlank
     private String email;
+
+    @NotBlank
+    private String password;
 }
 
