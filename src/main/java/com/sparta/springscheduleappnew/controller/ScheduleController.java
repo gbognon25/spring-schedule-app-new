@@ -6,6 +6,7 @@ import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.service.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,14 @@ public class ScheduleController {
                     return ResponseEntity.ok(responseDto);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ScheduleResponseDto>> getSchedules(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ScheduleResponseDto> schedulePage = scheduleService.getSchedules(page, size);
+        return ResponseEntity.ok(schedulePage);
     }
 
     @PutMapping("/{id}")
