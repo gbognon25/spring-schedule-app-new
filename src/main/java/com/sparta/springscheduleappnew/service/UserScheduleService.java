@@ -8,6 +8,7 @@ import com.sparta.springscheduleappnew.repository.UserRepository;
 import com.sparta.springscheduleappnew.repository.UserScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class UserScheduleService {
         return userScheduleRepository.save(userSchedule);
     }
 
+    @Transactional
     public void removeUserFromSchedule(Long userId, Long scheduleId) {
         userScheduleRepository.deleteByUserIdAndScheduleId(userId, scheduleId);
     }
