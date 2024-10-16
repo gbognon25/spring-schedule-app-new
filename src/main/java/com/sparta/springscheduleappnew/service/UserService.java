@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new PasswordEncoder();
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User createUser(UserRequestDto userDto) {
