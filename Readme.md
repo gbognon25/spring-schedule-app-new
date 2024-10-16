@@ -20,7 +20,7 @@ JDBC와 Spring Security는 사용하지 않습니다.
 JPA의 연관관계는 양방향으로 구현합니다.
 
 ## API Table (API 명세서)
-### User
+### User (유저)
 #### 1. User 생성 (Create a user):`/api/users`
 - Request
   * Method: POST
@@ -108,7 +108,7 @@ JPA의 연관관계는 양방향으로 구현합니다.
   * URL: http://localhost:8080/api/users/user_id
 - Response: Status `204 No Content`
 
-### Schedule
+### Schedule(일정)
 #### 1. Create a schedule: `api/schedules`
 - Request
   * Method: POST
@@ -148,9 +148,67 @@ JPA의 연관관계는 양방향으로 구현합니다.
 - Request
   * Method: GET
   * URL: http://localhost:8080/api/schedules?page=0&size=10
-  * 
+  * Query Parameter: 
+    * page: page 번호 (첫 번째 페이지는 기본값(default)이 0입니다)
+    * size: page당 일정 개수 (기본값은 10개입니다)
+- Response
+ ` {
+  "_embedded": {
+  "scheduleResponseDtoList": [
+  {
+  "id": 1,
+  "title": "ABCdef",
+  "description": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T10:08:57",
+  "updatedAt": "2024-10-16T10:08:57"
+  },
+  {
+  "id": 2,
+  "title": "ABCdef",
+  "description": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-15T21:17:47",
+  "updatedAt": "2024-10-15T21:17:47"
+  }
+  ]
+  },
+  "page": {
+  "size": 10,
+  "totalElements": 20,
+  "totalPages": 2,
+  "number": 0
+  }
+  }`
+- Status code: 200(OK)
 
+#### 4. Update a schedule: `api/schedule/{id}`
+- Request
+  * Method: PUT
+  * URL: http://localhost:8080/api/schedules/schedule_id
+  * Body: Select "raw" and set to JSON
+   ` {
+    "title": "Updated ABCdef",
+    "description": "Updated AAAAAbbbbcccc DDDDeeefffff."
+    }
+`
+- Response
+ ` {
+  "id": 1,
+  "title": "Updated ABCdef",
+  "description": "Updated AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T10:00:00",
+  "updatedAt": "2024-10-17T10:00:00"
+  }`
+- Status code: 200(OK)
 
+#### 5. Delete a schedule: `api/schedule/{id}`
+- Request
+- Method: DELETE
+- URL: http://localhost:8080/api/schedules/schedule_id
+- Response: Status `204 No Content`
 
+### Comment(댓글)
 
 

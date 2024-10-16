@@ -57,7 +57,7 @@ public class ScheduleService {
                     schedule.setTitle(updatedSchedule.getTitle());
                     schedule.setDescription(updatedSchedule.getDescription());
                     return scheduleRepository.save(schedule);
-                }).orElseThrow(() -> new RuntimeException("Schedule not found"));
+                }).orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
     }
 
     public void deleteSchedule(Long id) {
