@@ -39,10 +39,6 @@ public class UserService {
                 }).orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
     }
 
-//    public boolean verifyPassword(User user, String rawPassword) {
-//        return passwordEncoder.matches(rawPassword, user.getPassword());
-//    }
-
     public User login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
