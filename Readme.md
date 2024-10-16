@@ -335,3 +335,9 @@ JPA의 연관관계는 양방향으로 구현합니다.
 
 ## ERD
 ![img.png](img.png)
+
+## Parts to improve 
+The whole codebase needs to be improved especially:
+- Generate a JWT
+- Login authentication 
+Feel free to add review that can help to improve the code and create an excellent app.
