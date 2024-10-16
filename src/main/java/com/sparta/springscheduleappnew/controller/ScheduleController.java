@@ -18,12 +18,10 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final PagedResourcesAssembler<ScheduleResponseDto> pagedResourcesAssembler;
 
     @Autowired
-    public ScheduleController(ScheduleService scheduleService, PagedResourcesAssembler<ScheduleResponseDto> pagedResourcesAssembler) {
+    public ScheduleController(ScheduleService scheduleService) {
         this.scheduleService = scheduleService;
-        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @PostMapping
@@ -50,8 +48,15 @@ public class ScheduleController {
             @RequestParam(defaultValue = "10") int size) {
         Page<ScheduleResponseDto> schedulePage = scheduleService.getSchedules(page, size);
 
-        //Page를 PagedModel로 변환
-        PagedModel<ScheduleResponseDto> pagedModel = pagedResourcesAssembler.toModel(schedulePage);
+        //Page<ScheduleResponseDto>를 PagedModel<ScheduleResponseDto>로 변환
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
+                schedulePage.getSize(),
+                schedulePage.getNumber(),
+                schedulePage.getTotalElements(),
+                schedulePage.getTotalPages()
+        );
+
+        PagedModel<ScheduleResponseDto> pagedModel = PagedModel.of(schedulePage.getContent(), pageMetadata);
 
         return ResponseEntity.ok(pagedModel);
     }
