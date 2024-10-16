@@ -7,6 +7,8 @@ import com.sparta.springscheduleappnew.service.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final PagedResourcesAssembler<ScheduleResponseDto> pagedResourcesAssembler;
 
     @Autowired
-    public ScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleService scheduleService, PagedResourcesAssembler<ScheduleResponseDto> pagedResourcesAssembler) {
         this.scheduleService = scheduleService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @PostMapping
@@ -41,11 +45,15 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ScheduleResponseDto>> getSchedules(
+    public ResponseEntity<PagedModel<ScheduleResponseDto>> getSchedules(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<ScheduleResponseDto> schedulePage = scheduleService.getSchedules(page, size);
-        return ResponseEntity.ok(schedulePage);
+
+        //Page를 PagedModel로 변환
+        PagedModel<ScheduleResponseDto> pagedModel = pagedResourcesAssembler.toModel(schedulePage);
+
+        return ResponseEntity.ok(pagedModel);
     }
 
     @PutMapping("/{id}")
