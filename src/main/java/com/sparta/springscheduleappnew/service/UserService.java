@@ -26,7 +26,7 @@ public class UserService {
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword())); // Use PasswordEncoder to hash the password
+        user.setPassword(passwordEncoder.encode(userDto.getPassword())); // 비밀번호 암호화
         return userRepository.save(user);
     }
 

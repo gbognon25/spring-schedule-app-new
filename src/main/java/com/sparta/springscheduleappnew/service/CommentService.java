@@ -28,26 +28,16 @@ public class CommentService {
         this.scheduleRepository = scheduleRepository;
     }
 
-//    public Comment createComment(@Valid CommentRequestDto comment, Long userId, Long scheduleId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new RuntimeException("user가 존재하지 않습니다."));
-//        Schedule schedule = scheduleRepository.findById(scheduleId)
-//                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
-//        comment.setAuthor(user);
-//        comment.setSchedule(schedule);
-//        return commentRepository.save(comment);
-//    }
-
     public Comment createComment(CommentRequestDto commentDto, Long userId, Long scheduleId) {
-        // Retrieve the user by userId
+        // userId로 user를 검색
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
 
-        // Retrieve the schedule by scheduleId
+        //scheduleId로 일정을 검색
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
 
-        // Create and save the comment
+        // 대글의 생성 및 저장
         Comment comment = new Comment();
         comment.setContent(commentDto.getContent());
         comment.setAuthor(user); // Set the user

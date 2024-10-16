@@ -28,9 +28,9 @@ public class UserScheduleService {
 
     public UserSchedule assignUserToSchedule(Long userId, Long scheduleId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
         UserSchedule userSchedule = new UserSchedule();
         userSchedule.setUser(user);
         userSchedule.setSchedule(schedule);

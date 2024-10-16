@@ -28,13 +28,6 @@ public class ScheduleService {
         this.userRepository = userRepository;
     }
 
-//    public Schedule createSchedule(@Valid ScheduleRequestDto schedule, Long authorId) {
-//        User author = userRepository.findById(authorId)
-//                .orElseThrow(() -> new RuntimeException("Author not found"));
-//        schedule.setAuthor(author);
-//        return scheduleRepository.save(schedule);
-//    }
-
     public Schedule createSchedule(ScheduleRequestDto scheduleDto, Long authorId) {
         // authorId로 사용자(작성자)를 검색
         User author = userRepository.findById(authorId)
