@@ -1,6 +1,7 @@
 package com.sparta.springscheduleappnew.service;
 
 import com.sparta.springscheduleappnew.dto.CommentRequestDto;
+import com.sparta.springscheduleappnew.dto.CommentResponseDto;
 import com.sparta.springscheduleappnew.entity.Comment;
 import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.entity.User;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -49,9 +51,17 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
-    public List<Comment> getAllCommentsForSchedule(Long scheduleId) {
+//    public List<Comment> getAllCommentsForSchedule(Long scheduleId) {
+//        return scheduleRepository.findById(scheduleId)
+//                .map(Schedule::getComments)
+//                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
+//    }
+
+    public List<CommentResponseDto> getAllCommentsForSchedule(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
-                .map(Schedule::getComments)
+                .map(schedule -> schedule.getComments().stream()
+                        .map(CommentResponseDto::new)
+                        .collect(Collectors.toList()))
                 .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
     }
 

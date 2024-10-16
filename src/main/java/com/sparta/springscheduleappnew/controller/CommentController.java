@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -34,6 +36,12 @@ public class CommentController {
         return commentService.getCommentById(id)
                 .map(comment -> new ResponseEntity<>(new CommentResponseDto(comment), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/schedule/{scheduleId}")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsBySchedule(@PathVariable Long scheduleId) {
+        List<CommentResponseDto> comments = commentService.getAllCommentsForSchedule(scheduleId);
+        return ResponseEntity.ok(comments);
     }
 
     @PutMapping("/{id}")

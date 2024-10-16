@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -28,11 +31,26 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDto> login(@RequestParam String username, @RequestParam String password) {
+        User user = userService.login(username, password);
+        UserResponseDto responseDto = new UserResponseDto(user);
+        return ResponseEntity.ok(responseDto);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(user -> ResponseEntity.ok(new UserResponseDto(user)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers().stream()
+                .map(UserResponseDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
@@ -46,13 +64,6 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestParam String username, @RequestParam String password) {
-        User user = userService.login(username, password);
-        UserResponseDto responseDto = new UserResponseDto(user);
-        return ResponseEntity.ok(responseDto);
     }
 }
 
