@@ -127,7 +127,7 @@ JPA의 연관관계는 양방향으로 구현합니다.
   "createdAt": "2024-10-10T12:30:00",
   "updatedAt": "2024-10-10T12:30:00"
   }`
-- Status code: 201(Created)
+- Status code: 201(CREATED)
 
 #### 2. Get a schedule by id: `/api/schedules/{id}`
 - Request
@@ -205,10 +205,133 @@ JPA의 연관관계는 양방향으로 구현합니다.
 
 #### 5. Delete a schedule: `api/schedule/{id}`
 - Request
-- Method: DELETE
-- URL: http://localhost:8080/api/schedules/schedule_id
+  * Method: DELETE
+  * URL: http://localhost:8080/api/schedules/schedule_id
 - Response: Status `204 No Content`
 
 ### Comment(댓글)
+#### 1. Create a comment: `/api/comments`
+- Request
+  * Method: POST
+  * URL: http://localhost:8080/api/comments?userId=user_id&scheduleId=schedule_id
+  * Body: Select "raw" and set to JSON
+   ` {
+    "content": "AAAAAbbbbcccc DDDDeeefffff."
+    }`
+- Response
+ ` {
+  "id": 1,
+  "content": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-10T12:45:00",
+  "updatedAt": "2024-10-10T12:45:00"
+  }`
+- Status code: 201(CREATED)
+
+#### 2. Get comments by id: `/api/comments/{id}`
+- Request
+  * Method: GET
+  * URL: http://localhost:8080/api/comments/comment_id
+- Response
+`  {
+  "id": 1,
+  "content": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T12:30:00",
+  "updatedAt": "2024-10-16T12:30:00"
+  }`
+- Status code: 200(OK)
+
+#### 3. Get comments by schedule id: `/api/comments/schedule/{scheduleid}`
+- Request
+  * Method: GET
+  * URL: http://localhost:8080/api/comments/schedule/schedule_id
+- Response
+`  [
+  {
+  "id": 1,
+  "content": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T12:30:00",
+  "updatedAt": "2024-10-16T12:30:00"
+  },
+  {
+  "id": 2,
+  "content": "AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T12:45:00",
+  "updatedAt": "2024-10-16T12:45:00"
+  }
+  ]`
+- Status code: 200(OK)
+
+#### 4. Update comment: `/api/comments/{id}`
+- Request
+  * Method: PUT
+  * URL: http://localhost:8080/api/comments/comment_id
+  * Body: Select "raw" and set to JSON
+ `   {
+    "content": "Updated AAAAAbbbbcccc DDDDeeefffff."
+    }
+`
+- Response
+`  {
+  "id": 1,
+  "content": "Updated AAAAAbbbbcccc DDDDeeefffff.",
+  "authorName": "ABCdef",
+  "createdAt": "2024-10-16T12:30:00",
+  "updatedAt": "2024-10-17T10:00:00" // Reflects the update
+  }`
+
+
+#### 5. Delete comment: `/api/comments/{id}`
+- Request
+  * Method: DELETE
+  * URL: http://localhost:8080/api/comments/comment_id
+- Response: `204 No Content`
+
+### User-Schedule
+#### 1. Assign user to schedule:`/api/user-schedules`
+- Request
+  * Method: PUT
+  * URL: http://localhost:8080/api/user-schedules?userId=user_id&scheduleId=schedule_id
+- Response
+`  {
+  "userId": 1,
+  "username": "ABCdef",
+  "scheduleId": 1,
+  "scheduleTitle": "ABCdef"
+  }`
+- Status code: 201(CREATED)
+
+#### 2. Remove user from schedule: `/api/user-schedules`
+- Request
+  * Method: DELETE
+  * URL: http://localhost:8080/api/user-schedules?userId=user_id&scheduleId=schedule_id
+- Response: Status `204 No Content`
+
+
+#### 3. Get users assigned to schedules: `/api/user-schedules//schedule/{scheduleId}`
+- Request
+  * Method: GET
+  * URL: http://localhost:8080/api/user-schedules/schedule/schedule_id
+- Response
+`  [
+  {
+  "userId": 1,
+  "username": "ABCdef",
+  "scheduleId": 1,
+  "scheduleTitle": "ABCdef"
+  },
+  {
+  "userId": 2,
+  "username": "ABCdef",
+  "scheduleId": 1,
+  "scheduleTitle": "ABCdef"
+  }
+  ]`
+- Status code: 200(OK)
+
+
 
 

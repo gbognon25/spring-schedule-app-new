@@ -51,12 +51,6 @@ public class CommentService {
         return commentRepository.findById(id);
     }
 
-//    public List<Comment> getAllCommentsForSchedule(Long scheduleId) {
-//        return scheduleRepository.findById(scheduleId)
-//                .map(Schedule::getComments)
-//                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
-//    }
-
     public List<CommentResponseDto> getAllCommentsForSchedule(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
                 .map(schedule -> schedule.getComments().stream()
