@@ -30,15 +30,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserRequestDto userDto) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setUsername(userDto.getUsername());
-                    user.setEmail(userDto.getEmail());
-                    return userRepository.save(user);
-                }).orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
-    }
-
     public User login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username);
         if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
@@ -47,6 +38,14 @@ public class UserService {
         throw new RuntimeException("User명이나 비밀번호가 일치하지 않습니다.");
     }
 
+    public User updateUser(Long id, UserRequestDto userDto) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setUsername(userDto.getUsername());
+                    user.setEmail(userDto.getEmail());
+                    return userRepository.save(user);
+                }).orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
+    }
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
