@@ -16,9 +16,9 @@
 - 모든 Table은 고유 식별자(ID)를 가집니다.
 - 3 Layer Architecture 에 따라 각 Layer의 목적에 맞게 개발합니다.
 - CRUD 필수 기능은 모두 Database 연결 및 JPA를 사용해서 개발합니다.
-JDBC와 Spring Security는 사용하지 않습니다.
-인증/인가 절차는 JWT를 활용하여 개발합니다.
-JPA의 연관관계는 양방향으로 구현합니다.
+- JDBC와 Spring Security는 사용하지 않습니다.
+- 인증/인가 절차는 JWT를 활용하여 개발합니다.
+- JPA의 연관관계는 양방향으로 구현합니다.
 
 ## API Table (API 명세서)
 ### User (유저)
@@ -340,4 +340,5 @@ JPA의 연관관계는 양방향으로 구현합니다.
 The whole codebase needs to be improved especially:
 - Generate a JWT
 - Login authentication 
+
 Feel free to add review that can help to improve the code and create an excellent app.
