@@ -3,9 +3,6 @@ package com.sparta.springscheduleappnew.dto;
 import com.sparta.springscheduleappnew.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

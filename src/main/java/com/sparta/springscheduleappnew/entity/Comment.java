@@ -1,15 +1,15 @@
 package com.sparta.springscheduleappnew.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "comments")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Comment extends Timestamped {
 
     @Id

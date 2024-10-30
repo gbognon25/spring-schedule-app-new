@@ -8,29 +8,21 @@ import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.repository.CommentRepository;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
 
-    @Autowired
-    public CommentService(CommentRepository commentRepository, UserRepository userRepository, ScheduleRepository scheduleRepository) {
-        this.commentRepository = commentRepository;
-        this.userRepository = userRepository;
-        this.scheduleRepository = scheduleRepository;
-    }
-
-    public Comment createComment(CommentRequestDto commentDto, Long userId, Long scheduleId) {
+    public CommentResponseDto createComment(CommentRequestDto commentDto, Long userId, Long scheduleId) {
         // userId로 user를 검색
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
@@ -40,15 +32,21 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
 
         // 대글의 생성 및 저장
-        Comment comment = new Comment();
-        comment.setContent(commentDto.getContent());
-        comment.setAuthor(user); // Set the user
-        comment.setSchedule(schedule); // Set the schedule
-        return commentRepository.save(comment);
+        Comment comment = Comment.builder()
+                .content(commentDto.getContent())
+                .author(user) // Set the user
+                .schedule(schedule) // Set the schedule
+                .build();
+
+        commentRepository.save(comment);
+
+        return new CommentResponseDto(comment);
     }
 
-    public Optional<Comment> getCommentById(Long id) {
-        return commentRepository.findById(id);
+    public Optional<CommentResponseDto> getCommentById(Long id) {
+        return commentRepository
+                .findById(id)
+                .map(CommentResponseDto::new);
     }
 
     public List<CommentResponseDto> getAllCommentsForSchedule(Long scheduleId) {
@@ -59,12 +57,19 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
     }
 
-    public Comment updateComment(Long id, @Valid CommentRequestDto updatedComment) {
-        return commentRepository.findById(id)
-                .map(comment -> {
-                    comment.setContent(updatedComment.getContent());
-                    return commentRepository.save(comment);
-                }).orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다."));
+    public CommentResponseDto updateComment(Long id, CommentRequestDto commentDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다"));
+
+        Comment updatedComment = Comment.builder()
+                .id(comment.getId())
+                .content(commentDto.getContent())
+                .build();
+
+        // Save the updated comment
+        commentRepository.save(updatedComment);
+
+        return new CommentResponseDto(updatedComment);
     }
 
     public void deleteComment(Long id) {

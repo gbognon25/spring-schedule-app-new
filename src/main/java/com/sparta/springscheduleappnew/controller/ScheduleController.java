@@ -5,9 +5,8 @@ import com.sparta.springscheduleappnew.dto.ScheduleResponseDto;
 import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.service.ScheduleService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,30 +14,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/schedules")
+@RequiredArgsConstructor
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-
-    @Autowired
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
-
+    
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
             @RequestBody @Valid ScheduleRequestDto scheduleDto, @RequestParam Long authorId) {
-        Schedule createdSchedule = scheduleService.createSchedule(scheduleDto, authorId);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(createdSchedule);
+        ScheduleResponseDto responseDto = scheduleService.createSchedule(scheduleDto, authorId);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable Long id) {
         return scheduleService.getScheduleById(id)
-                .map(schedule -> {
-                    ScheduleResponseDto responseDto = new ScheduleResponseDto(schedule);
-                    return ResponseEntity.ok(responseDto);
-                })
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -64,8 +55,7 @@ public class ScheduleController {
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id, @RequestBody @Valid ScheduleRequestDto scheduleDto) {
-        Schedule updatedSchedule = scheduleService.updateSchedule(id, scheduleDto);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto(updatedSchedule);
+        ScheduleResponseDto responseDto = scheduleService.updateSchedule(id, scheduleDto);
         return ResponseEntity.ok(responseDto);
     }
 

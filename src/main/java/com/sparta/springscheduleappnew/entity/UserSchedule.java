@@ -1,13 +1,13 @@
 package com.sparta.springscheduleappnew.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @Table(name = "user_schedules",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "schedule_id"}))
 @NoArgsConstructor

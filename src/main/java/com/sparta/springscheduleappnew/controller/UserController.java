@@ -5,58 +5,48 @@ import com.sparta.springscheduleappnew.dto.UserResponseDto;
 import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
+    
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
-        User createdUser = userService.createUser(userDto);
-        UserResponseDto responseDto = new UserResponseDto(createdUser);
+        UserResponseDto responseDto = userService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@RequestParam String username, @RequestParam String password) {
-        User user = userService.login(username, password);
-        UserResponseDto responseDto = new UserResponseDto(user);
+        UserResponseDto responseDto = userService.login(username, password);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
-                .map(user -> ResponseEntity.ok(new UserResponseDto(user)))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
-        List<UserResponseDto> users = userService.getAllUsers().stream()
-                .map(UserResponseDto::new)
-                .collect(Collectors.toList());
+        List<UserResponseDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDto userDto) {
-        User updatedUser = userService.updateUser(id, userDto);
-        UserResponseDto responseDto = new UserResponseDto(updatedUser);
+        UserResponseDto responseDto = userService.updateUser(id, userDto);
         return ResponseEntity.ok(responseDto);
     }
 
