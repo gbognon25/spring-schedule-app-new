@@ -6,9 +6,6 @@ import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
-import jakarta.validation.Valid;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

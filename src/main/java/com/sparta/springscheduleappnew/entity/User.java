@@ -24,7 +24,7 @@ public class User extends Timestamped {
 
     @NotBlank(message="사용자 이름을 입력하세요")
     @Size(min = 3, max = 30, message = "사용자 이름은 3~30자 사이여야 합니다.")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @NotBlank(message = "Email을 입력하세요")
