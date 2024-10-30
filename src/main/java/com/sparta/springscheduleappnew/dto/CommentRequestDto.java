@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentRequestDto {
 
+    @NotBlank(message = "댓글을 작성해주세요.")
     private String content;
 }

@@ -1,6 +1,7 @@
 package com.sparta.springscheduleappnew.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Schedule extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "제목을 입력하세요")
     private String title;
 
     private String description;

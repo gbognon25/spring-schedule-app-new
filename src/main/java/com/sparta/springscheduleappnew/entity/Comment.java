@@ -1,6 +1,7 @@
 package com.sparta.springscheduleappnew.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Comment extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "댓글을 작성해주세요.")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

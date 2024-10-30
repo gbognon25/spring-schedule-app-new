@@ -41,20 +41,13 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
 
-        User updatedUser = User.builder()
-                .id(user.getId())
-                .username(userDto.getUsername())
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .schedules(user.getSchedules())
-                .userSchedules(user.getUserSchedules())
-                .build();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        User savedUser = userRepository.save(updatedUser);
+        User savedUser = userRepository.save(user);
         return new UserResponseDto(savedUser);
     }
-
-
 
     public Optional<UserResponseDto> getUserById(Long id) {
         return userRepository.findById(id)
