@@ -1,8 +1,11 @@
 package com.sparta.springscheduleappnew.exception;
 
+import com.sparta.springscheduleappnew.errors.CustomException;
+import com.sparta.springscheduleappnew.errors.UnauthorizedException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.sparta.springscheduleappnew.errors.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +34,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeExceptions(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + ex.getMessage());
+    }
+
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getErrorCode().getStatus(),
+                ex.getErrorCode().getMessage()
+        );
+        return ResponseEntity.status(ex.getErrorCode().getStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnAuthorizationException(UnauthorizedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getErrorCode().getStatus(),
+                ex.getErrorCode().getMessage()
+        );
+        return ResponseEntity.status(ex.getErrorCode().getStatus()).body(errorResponse);
     }
 }
 
