@@ -1,5 +1,6 @@
 package com.sparta.springscheduleappnew.controller;
 
+import com.sparta.springscheduleappnew.dto.LoginRequestDto;
 import com.sparta.springscheduleappnew.dto.UserRequestDto;
 import com.sparta.springscheduleappnew.dto.UserResponseDto;
 import com.sparta.springscheduleappnew.entity.User;
@@ -26,10 +27,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestParam String username, @RequestParam String password) {
-        UserResponseDto responseDto = userService.login(username, password);
+    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
+        UserResponseDto responseDto = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
         return ResponseEntity.ok(responseDto);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
