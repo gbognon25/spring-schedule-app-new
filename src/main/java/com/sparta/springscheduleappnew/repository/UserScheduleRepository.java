@@ -12,5 +12,7 @@ public interface UserScheduleRepository extends JpaRepository<UserSchedule, Long
     List<UserSchedule> findByScheduleId(Long scheduleId);
 
     void deleteByUserIdAndScheduleId(Long userId, Long scheduleId);
+
+    boolean existsByUserIdAndScheduleId(Long userId, Long scheduleId);
 }
 

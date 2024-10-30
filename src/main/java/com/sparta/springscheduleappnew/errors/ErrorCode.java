@@ -11,7 +11,7 @@ public enum ErrorCode {
     NOT_NULL(HttpStatus.BAD_REQUEST, "필수 값 누락", 400),
 
     // 401 errors
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다.", 401),
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "잘못된 사용자 이름 또는 비밀번호입니다.", 401),
 
     // 404 errors
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User가 존재하지 않습니다.", 404),

@@ -5,6 +5,8 @@ import com.sparta.springscheduleappnew.dto.CommentResponseDto;
 import com.sparta.springscheduleappnew.entity.Comment;
 import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.entity.User;
+import com.sparta.springscheduleappnew.errors.CustomException;
+import com.sparta.springscheduleappnew.errors.ErrorCode;
 import com.sparta.springscheduleappnew.repository.CommentRepository;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
@@ -23,13 +25,13 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
 
     public CommentResponseDto createComment(CommentRequestDto commentDto, Long userId, Long scheduleId) {
-        // userId로 user를 검색
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
+    // userId로 user를 검색
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        //scheduleId로 일정을 검색
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
+    // scheduleId로 일정을 검색
+    Schedule schedule = scheduleRepository.findById(scheduleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         // 대글의 생성 및 저장
         Comment comment = Comment.builder()
@@ -43,23 +45,27 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    public Optional<CommentResponseDto> getCommentById(Long id) {
-        return commentRepository
-                .findById(id)
-                .map(CommentResponseDto::new);
+    public CommentResponseDto getCommentById(Long id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        return new CommentResponseDto(comment);
     }
 
     public List<CommentResponseDto> getAllCommentsForSchedule(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId)
-                .map(schedule -> schedule.getComments().stream()
-                        .map(CommentResponseDto::new)
-                        .collect(Collectors.toList()))
-                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
+    return scheduleRepository
+        .findById(scheduleId)
+        .map(
+            schedule ->
+                schedule.getComments().stream()
+                    .map(CommentResponseDto::new)
+                    .collect(Collectors.toList()))
+        .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
     }
 
     public CommentResponseDto updateComment(Long id, CommentRequestDto commentDto) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다"));
+    Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         comment.setContent(commentDto.getContent());
 
@@ -70,6 +76,9 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
+        if (!commentRepository.existsById(id)) {
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
         commentRepository.deleteById(id);
     }
 }

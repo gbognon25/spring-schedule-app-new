@@ -4,6 +4,8 @@ import com.sparta.springscheduleappnew.dto.UserScheduleResponseDto;
 import com.sparta.springscheduleappnew.entity.Schedule;
 import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.entity.UserSchedule;
+import com.sparta.springscheduleappnew.errors.CustomException;
+import com.sparta.springscheduleappnew.errors.ErrorCode;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
 import com.sparta.springscheduleappnew.repository.UserScheduleRepository;
@@ -23,9 +25,9 @@ public class UserScheduleService {
 
     public UserScheduleResponseDto assignUserToSchedule(Long userId, Long scheduleId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User가 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new RuntimeException("일정이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.SCHEDULE_NOT_FOUND));
 
         UserSchedule userSchedule = UserSchedule.builder()
                 .user(user)
@@ -42,6 +44,10 @@ public class UserScheduleService {
 
     @Transactional
     public void removeUserFromSchedule(Long userId, Long scheduleId) {
+
+        if (!userScheduleRepository.existsByUserIdAndScheduleId(userId, scheduleId)) {
+            throw new CustomException(ErrorCode.SCHEDULE_NOT_FOUND);
+        }
         userScheduleRepository.deleteByUserIdAndScheduleId(userId, scheduleId);
     }
 

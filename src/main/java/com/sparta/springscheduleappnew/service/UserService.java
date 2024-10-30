@@ -8,11 +8,10 @@ import com.sparta.springscheduleappnew.errors.CustomException;
 import com.sparta.springscheduleappnew.errors.ErrorCode;
 import com.sparta.springscheduleappnew.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,15 +43,13 @@ public class UserService {
     public UserResponseDto login(String username, String rawPassword) {
         User user = userRepository.findByUsername(username);
 
-        if (user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        if (user == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
         }
         return new UserResponseDto(user);
     }
 
+    @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto userDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
