@@ -11,7 +11,6 @@ import com.sparta.springscheduleappnew.repository.CommentRepository;
 import com.sparta.springscheduleappnew.repository.ScheduleRepository;
 import com.sparta.springscheduleappnew.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,8 @@ public class CommentService {
         // 대글의 생성 및 저장
         Comment comment = Comment.builder()
                 .content(commentDto.getContent())
-                .author(user) // Set the user
-                .schedule(schedule) // Set the schedule
+                .author(user)
+                .schedule(schedule)
                 .build();
 
         commentRepository.save(comment);
