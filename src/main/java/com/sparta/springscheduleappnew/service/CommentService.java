@@ -61,14 +61,11 @@ public class CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("댓글이 존재하지 않습니다"));
 
-        Comment updatedComment = Comment.builder()
-                .id(comment.getId())
-                .content(commentDto.getContent())
-                .build();
+        comment.setContent(commentDto.getContent());
 
-        // Save the updated comment
+        Comment updatedComment = commentRepository.save(comment);
+
         commentRepository.save(updatedComment);
-
         return new CommentResponseDto(updatedComment);
     }
 
