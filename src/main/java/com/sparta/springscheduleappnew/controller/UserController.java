@@ -3,11 +3,9 @@ package com.sparta.springscheduleappnew.controller;
 import com.sparta.springscheduleappnew.dto.LoginRequestDto;
 import com.sparta.springscheduleappnew.dto.UserRequestDto;
 import com.sparta.springscheduleappnew.dto.UserResponseDto;
-import com.sparta.springscheduleappnew.entity.User;
 import com.sparta.springscheduleappnew.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +19,15 @@ public class UserController {
     private final UserService userService;
     
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userDto) {
-        UserResponseDto responseDto = userService.createUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserRequestDto userDto) {
+        userService.createUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입을 성공적으로 하였습니다.");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDto loginRequest) {
-        UserResponseDto responseDto = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        return ResponseEntity.ok(responseDto);
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequest) {
+        userService.login(loginRequest.getUsername(), loginRequest.getPassword());
+        return ResponseEntity.ok("정상적으로 로그인하였습니다.");
     }
 
 
