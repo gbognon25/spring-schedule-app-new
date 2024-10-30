@@ -23,7 +23,7 @@ public class User extends Timestamped {
     private Long id;
 
     @NotBlank(message="사용자 이름을 입력하세요")
-    @Size(min = 3, max = 30, message = "사용자 이름은 3~30자 사이여야 합니다.")
+    @Size(min = 8, max = 30, message = "사용자 이름은 8~30자 사이여야 합니다.")
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -33,7 +33,7 @@ public class User extends Timestamped {
     private String email;
 
     @NotBlank(message = "비밀번호를 입력하세요")
-    @Size(min = 6, message = "비밀번호는 최소 8자 이상이어야 합니다.")
+    @Size(min = 8, max = 80, message = "비밀번호는 8~80자 사이여야 합니다.")
     @Column(nullable = false)
     private String password;
 
